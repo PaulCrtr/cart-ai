@@ -5,7 +5,7 @@ import { START, StateGraph } from '@langchain/langgraph';
 import { END, Annotation } from '@langchain/langgraph';
 import { BaseMessage } from '@langchain/core/messages';
 import { createResearcher } from './agents/researcher';
-import { createCartHandler } from './agents/cartHandler';
+import { createCartHandler } from './agents/cartHandler/cartHandler';
 import { createSupervisor } from './agents/supervisor';
 
 export type AgentStateT = {
