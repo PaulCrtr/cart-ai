@@ -1,20 +1,11 @@
 import { tool } from '@langchain/core/tools';
-import { writeFileSync, readFileSync, existsSync } from 'fs';
-import * as path from 'path';
+import { loadCart, saveCart } from './cartHandler.utils';
 import { z } from 'zod';
 
-const loadCart = async () => {
-  const filePath = path.resolve(__dirname, 'cart.json');
-  if (!existsSync(filePath)) {
-    return [];
-  }
-  const data = readFileSync(filePath, 'utf-8');
-  return JSON.parse(data);
-};
-
-const saveCart = async (cart) => {
-  const filePath = path.resolve(__dirname, 'cart.json');
-  writeFileSync(filePath, JSON.stringify(cart, null, 2));
+export type ProductT = {
+  id: string;
+  name: string;
+  url: string;
 };
 
 const readTool = tool(
@@ -51,7 +42,7 @@ const addTool = tool(
 const removeTool = tool(
   async ({ product }) => {
     const cart = await loadCart();
-    const updatedCart = cart.filter((item) => item.id !== product.id);
+    const updatedCart = cart.filter((item: ProductT) => item.id !== product.id);
     await saveCart(updatedCart);
     return `Product removed: ${product.id}`;
   },
