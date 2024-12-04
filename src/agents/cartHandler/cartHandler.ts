@@ -2,8 +2,8 @@ import { HumanMessage, SystemMessage } from '@langchain/core/messages';
 import { createReactAgent } from '@langchain/langgraph/prebuilt';
 import { RunnableConfig } from '@langchain/core/runnables';
 import { ChatOpenAI } from '@langchain/openai';
-import { AgentStateT } from 'src/app.service';
 import cartHandlerTools from './tools';
+import { AgentStateT } from 'src/workflow/workflow.service';
 
 export function createCartHandler(llm: ChatOpenAI) {
   const cartHandlerAgent = createReactAgent({

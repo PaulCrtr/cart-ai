@@ -3,7 +3,7 @@ import { HumanMessage, SystemMessage } from '@langchain/core/messages';
 import { RunnableConfig, RunnableLike } from '@langchain/core/runnables';
 import { createReactAgent } from '@langchain/langgraph/prebuilt';
 import { ChatOpenAI } from '@langchain/openai';
-import { AgentStateT } from 'src/app.service';
+import { AgentStateT } from 'src/workflow/workflow.service';
 
 export function createResearcher(llm: ChatOpenAI): RunnableLike {
   const researcherAgent = createReactAgent({
