@@ -1,4 +1,4 @@
-import { tool } from '@langchain/core/tools';
+import { DynamicStructuredTool, Tool, tool } from '@langchain/core/tools';
 import { loadCart, saveCart } from './cartHandler.utils';
 import { z } from 'zod';
 
@@ -8,9 +8,9 @@ export type ProductT = {
   url: string;
 };
 
-const readTool = tool(
-  async () => {
-    const cart = await loadCart();
+const readTool: Tool = tool(
+  () => {
+    const cart = loadCart();
     return JSON.stringify(cart);
   },
   {
@@ -19,11 +19,11 @@ const readTool = tool(
   },
 );
 
-const addTool = tool(
-  async ({ product }) => {
-    const cart = await loadCart();
+const addTool: DynamicStructuredTool = tool(
+  ({ product }) => {
+    const cart = loadCart();
     cart.push(product);
-    await saveCart(cart);
+    saveCart(cart);
     return `Product added: ${product.name}.`;
   },
   {
@@ -39,11 +39,11 @@ const addTool = tool(
   },
 );
 
-const removeTool = tool(
-  async ({ product }) => {
-    const cart = await loadCart();
+const removeTool: DynamicStructuredTool = tool(
+  ({ product }) => {
+    const cart = loadCart();
     const updatedCart = cart.filter((item: ProductT) => item.id !== product.id);
-    await saveCart(updatedCart);
+    saveCart(updatedCart);
     return `Product removed: ${product.id}`;
   },
   {
