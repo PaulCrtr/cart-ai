@@ -5,7 +5,7 @@ import { END, Annotation } from '@langchain/langgraph';
 import { BaseMessage } from '@langchain/core/messages';
 import { ResearcherService } from '../agents/researcher/researcher.service';
 import { CartHandlerService } from '../agents/cartHandler/cartHandler.service';
-import { createSupervisor } from '.././agents/supervisor';
+import { SupervisorService } from '../agents/supervisor/supervisor.service';
 
 export type AgentStateT = {
   messages: BaseMessage[];
@@ -36,6 +36,7 @@ export class WorkflowService {
   constructor(
     private cartHandlerService: CartHandlerService,
     private researcherService: ResearcherService,
+    private supervisorService: SupervisorService,
   ) {
     this.createGraph();
   }
@@ -44,7 +45,7 @@ export class WorkflowService {
     const workflow = new StateGraph(this.agentState)
       .addNode('researcher', this.researcherService.createNode(this.llm))
       .addNode('cart_handler', this.cartHandlerService.createNode(this.llm))
-      .addNode('supervisor', await createSupervisor(this.llm, this.members));
+      .addNode('supervisor', await this.supervisorService.createChain(this.llm, this.members));
 
     this.members.forEach((member) => {
       workflow.addEdge(member, 'supervisor');
