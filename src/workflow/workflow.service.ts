@@ -15,8 +15,8 @@ export type AgentStateT = {
 @Injectable()
 export class WorkflowService {
   private llm = new ChatOpenAI({
-    modelName: 'gpt-4o',
-    temperature: 0,
+    modelName: 'gpt-4-turbo',
+    temperature: 0.1,
   });
 
   private agentState = Annotation.Root({
@@ -66,7 +66,7 @@ export class WorkflowService {
           }),
         ],
       },
-      { recursionLimit: 20 },
+      { recursionLimit: 15 },
     );
 
     let lastMessageContent = '';
