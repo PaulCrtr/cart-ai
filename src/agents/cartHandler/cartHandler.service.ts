@@ -1,6 +1,6 @@
 import { HumanMessage, SystemMessage } from '@langchain/core/messages';
 import { createReactAgent } from '@langchain/langgraph/prebuilt';
-import { RunnableConfig } from '@langchain/core/runnables';
+import { RunnableConfig, RunnableLike } from '@langchain/core/runnables';
 import { ChatOpenAI } from '@langchain/openai';
 import cartHandlerTools from './cartHandler.tools';
 import { AgentStateT } from 'src/workflow/workflow.service';
@@ -8,7 +8,7 @@ import { Injectable } from '@nestjs/common';
 
 @Injectable()
 export class CartHandlerService {
-  createNode(llm: ChatOpenAI) {
+  createNode(llm: ChatOpenAI): RunnableLike {
     const agent = createReactAgent({
       llm,
       tools: cartHandlerTools,

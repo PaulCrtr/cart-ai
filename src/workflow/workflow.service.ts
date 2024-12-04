@@ -3,7 +3,7 @@ import { ChatOpenAI } from '@langchain/openai';
 import { START, StateGraph } from '@langchain/langgraph';
 import { END, Annotation } from '@langchain/langgraph';
 import { BaseMessage } from '@langchain/core/messages';
-import { createResearcher } from '.././agents/researcher';
+import { ResearcherService } from '../agents/researcher/researcher.service';
 import { CartHandlerService } from '../agents/cartHandler/cartHandler.service';
 import { createSupervisor } from '.././agents/supervisor';
 
@@ -33,13 +33,16 @@ export class WorkflowService {
   private members = ['cart_handler', 'researcher'] as const;
   public graph: any;
 
-  constructor(private cartHandlerService: CartHandlerService) {
+  constructor(
+    private cartHandlerService: CartHandlerService,
+    private researcherService: ResearcherService,
+  ) {
     this.createGraph();
   }
 
   async createGraph() {
     const workflow = new StateGraph(this.agentState)
-      .addNode('researcher', createResearcher(this.llm))
+      .addNode('researcher', this.researcherService.createNode(this.llm))
       .addNode('cart_handler', this.cartHandlerService.createNode(this.llm))
       .addNode('supervisor', await createSupervisor(this.llm, this.members));
 
