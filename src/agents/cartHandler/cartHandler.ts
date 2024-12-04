@@ -10,10 +10,11 @@ export function createCartHandler(llm: ChatOpenAI) {
     llm,
     tools: cartHandlerTools,
     messageModifier: new SystemMessage(
-      `You are excellent at managing JSON files.
-   - Always list the cart contents when unsure about what the user means.
-   - For ambiguous deletion requests (e.g., "remove the tree"), first look for items with matching names or IDs.
-   - Provide clear feedback if no items match or if multiple items are found.`,
+      `You manage a shopping cart in JSON format. You can add or remove products and read the list. ` +
+        `Products to be added come from a researcher agent, never create substitute items. ` +
+        `Never add more than one item at a time. If you receive several, choose one to add. ` +
+        `For ambiguous deletion requests (e.g., "remove the tree"), first look for items with matching names, IDs, URLs. ` +
+        `Always provide the product name and url after adding it. Give unique IDs to products.`,
     ),
   });
 

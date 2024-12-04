@@ -8,10 +8,12 @@ import { AgentStateT } from 'src/app.service';
 export function createResearcher(llm: ChatOpenAI): RunnableLike {
   const researcherAgent = createReactAgent({
     llm,
-    tools: [new TavilySearchResults({ maxResults: 2 })],
+    tools: [new TavilySearchResults({ maxResults: 5 })],
     messageModifier: new SystemMessage(
-      'You are a web researcher. You may use the Tavily search engine to search the web for' +
-        ' important information, so the cart handler in your team can make useful action.',
+      `You're a web researcher. You may use the Tavily search engine to search the web for a product. ` +
+        `Make sure to search for a product (not articles, comparison sites, or anything else). ` +
+        `If you don't have a lot of information about a product, do the search anyway. Always run a single search. ` +
+        `Don't worry about adding it to the cart; another agent is responsible for saving the information you return.`,
     ),
   });
 

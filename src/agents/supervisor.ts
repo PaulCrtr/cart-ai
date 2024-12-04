@@ -1,19 +1,17 @@
-import { z } from 'zod';
 import { JsonOutputToolsParser } from 'langchain/output_parsers';
 import { ChatPromptTemplate, MessagesPlaceholder } from '@langchain/core/prompts';
 import { END } from '@langchain/langgraph';
 import { ChatOpenAI } from '@langchain/openai';
+import { z } from 'zod';
 
-export async function createSupervisor(llm: ChatOpenAI, members) {
+export async function createSupervisor(llm: ChatOpenAI, members: readonly string[]) {
   const options = [END, ...members];
 
-  const systemPrompt = `You are the supervisor of a shopping cart tool. You oversee two workers:
-       - 'cart_handler': manages the shopping cart (add, remove, or view items).
-       - 'researcher': searches the web for relevant information.
-       Your job is to:
-       1. Route tasks to the appropriate worker based on the user's request.
-       2. Once all tasks are complete, generate a clear and user-friendly response summarizing the outcome of the request.
-       You must ensure your responses are concise, helpful, and address the user's needs.`;
+  const systemPrompt =
+    `You are the supervisor of a shopping cart tool. You oversee two workers: ` +
+    `- 'cart_handler': manages the shopping cart (add, remove, or view items). ` +
+    `- 'researcher': searches for products on the Internet. ` +
+    `Your job is to route tasks to the appropriate worker.`;
 
   const routingTool = {
     name: 'route',
@@ -31,7 +29,6 @@ export async function createSupervisor(llm: ChatOpenAI, members) {
 
   const formattedPrompt = await prompt.partial({
     options: options.join(', '),
-    // members: members.join(', '),
   });
 
   const supervisorChain = formattedPrompt
