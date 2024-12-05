@@ -1,5 +1,5 @@
 import { DynamicStructuredTool, Tool, tool } from '@langchain/core/tools';
-import { loadCart, saveCart } from './cartHandler.utils';
+import { loadCart, newUniqueID, saveCart } from './cartHandler.utils';
 import { z } from 'zod';
 
 export type ProductT = {
@@ -15,23 +15,22 @@ const readTool: Tool = tool(
   },
   {
     name: 'read_tool',
-    description: 'Displays the current cart.',
+    description: 'Read the current cart.',
   },
 );
 
 const addTool: DynamicStructuredTool = tool(
   ({ product }) => {
     const cart = loadCart();
-    cart.push(product);
+    cart.push({ ...product, id: newUniqueID(cart) });
     saveCart(cart);
-    return `Product added: ${product.name}.`;
+    return `Product added: ${product.name}. Cart updated: ${JSON.stringify(cart)}`;
   },
   {
     name: 'add_tool',
     description: 'Adds a product to the cart.',
     schema: z.object({
       product: z.object({
-        id: z.string(),
         name: z.string(),
         url: z.string(),
       }),
@@ -44,7 +43,7 @@ const removeTool: DynamicStructuredTool = tool(
     const cart = loadCart();
     const updatedCart = cart.filter((item: ProductT) => item.id !== product.id);
     saveCart(updatedCart);
-    return `Product removed: ${product.id}`;
+    return `Product removed: ${product.id}. Cart updated: ${JSON.stringify(cart)}`;
   },
   {
     name: 'remove_tool',
