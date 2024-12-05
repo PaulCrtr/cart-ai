@@ -71,40 +71,31 @@ export class WorkflowService {
       { recursionLimit: 15 },
     );
 
-    let lastMessageContent = '';
+    let finalResponse = '';
 
     const prettifyOutput = (output: Record<string, any>) => {
       const keys = Object.keys(output);
       const firstItem = output[keys[0]];
-
+      console.dir(output);
       if ('messages' in firstItem && Array.isArray(firstItem.messages)) {
         const lastMessage = firstItem.messages[firstItem.messages.length - 1];
-        lastMessageContent = lastMessage.content;
-
+        finalResponse = lastMessage.content;
         console.dir(
           {
-            type: lastMessage._getType(),
-            content: lastMessage.content,
-            tool_calls: lastMessage.tool_calls,
+            lastMessage: lastMessage.content,
           },
           { depth: null },
         );
-      }
-
-      if ('sender' in firstItem) {
-        console.log({
-          sender: firstItem.sender,
-        });
       }
     };
 
     for await (const output of streamResults) {
       if (!output?.__end__) {
         prettifyOutput(output);
-        console.log('----');
+        console.log('\x1b[34m============= \x1b[0m');
       }
     }
 
-    return lastMessageContent;
+    return finalResponse;
   }
 }
