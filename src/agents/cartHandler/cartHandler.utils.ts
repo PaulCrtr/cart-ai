@@ -16,6 +16,7 @@ export const saveCart = (cart: ProductT[]): void => {
   writeFileSync(filePath, JSON.stringify(cart, null, 2));
 };
 
+// Generates a new unique ID for a product based on the current cart items
 export const newUniqueID = (cart: ProductT[]): string => {
   let newID = 1;
   const currentIDs = cart.map(({ id }) => Number(id));

@@ -8,6 +8,7 @@ import { AgentStateT } from 'src/workflow/workflow.service';
 
 @Injectable()
 export class ResearcherService {
+  // Return an agent node with the Tavily tool and instructions for performing web searches
   createNode(llm: ChatOpenAI): RunnableLike {
     const agent = createReactAgent({
       llm,
@@ -24,6 +25,7 @@ export class ResearcherService {
       const result = await agent.invoke(state, config);
       const lastMessage = result.messages[result.messages.length - 1];
       return {
+        // Wrap the last message into a HumanMessage for the researcher
         messages: [new HumanMessage({ content: lastMessage.content, name: 'researcher' })],
       };
     };

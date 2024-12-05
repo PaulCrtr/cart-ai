@@ -8,6 +8,7 @@ import { Runnable } from '@langchain/core/runnables';
 
 @Injectable()
 export class SupervisorService {
+  // Returns a chain for the supervisor agent with instructions to route tasks to the appropriate worker
   async createChain(llm: ChatOpenAI, members: readonly string[]): Promise<Runnable> {
     const options = [END, ...members];
 
@@ -45,8 +46,8 @@ export class SupervisorService {
           tool_choice: 'route',
         }),
       )
-      .pipe(new JsonOutputToolsParser())
-      .pipe((x) => x[0].args);
+      .pipe(new JsonOutputToolsParser()) // Parses the JSON response from the LLM
+      .pipe((x) => x[0].args); // Extracts the selected "next" action
 
     return chain;
   }

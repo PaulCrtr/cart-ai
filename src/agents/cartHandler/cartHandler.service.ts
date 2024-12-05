@@ -8,6 +8,7 @@ import { Injectable } from '@nestjs/common';
 
 @Injectable()
 export class CartHandlerService {
+  // Return an agent node with tools and instructions for managing the cart in JSON format
   createNode(llm: ChatOpenAI): RunnableLike {
     const agent = createReactAgent({
       llm,
@@ -25,6 +26,7 @@ export class CartHandlerService {
       const result = await agent.invoke(state, config);
       const lastMessage = result.messages[result.messages.length - 1];
       return {
+        // Wrap the last message into a HumanMessage for the cart handler
         messages: [new HumanMessage({ content: lastMessage.content, name: 'cart_handler' })],
       };
     };

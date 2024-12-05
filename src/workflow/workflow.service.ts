@@ -12,6 +12,7 @@ export type AgentStateT = {
   next: string;
 };
 
+// Service for orchestrating a workflow between agents using a state graph
 @Injectable()
 export class WorkflowService {
   private llm = new ChatOpenAI({
@@ -57,6 +58,7 @@ export class WorkflowService {
     this.graph = workflow.compile();
   }
 
+  // Handles a user query by triggering the workflow process and returning the response.
   async processStream(query: string): Promise<string> {
     const streamResults = await this.graph.stream(
       {
