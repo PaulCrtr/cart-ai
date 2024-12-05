@@ -15,7 +15,7 @@ const readTool: Tool = tool(
   },
   {
     name: 'read_tool',
-    description: 'Read the current cart.',
+    description: 'Reads the current cart.',
   },
 );
 
@@ -43,7 +43,7 @@ const removeTool: DynamicStructuredTool = tool(
     const cart = loadCart();
     const updatedCart = cart.filter((item: ProductT) => item.id !== product.id);
     saveCart(updatedCart);
-    return `Product removed: ${product.id}. Cart updated: ${JSON.stringify(cart)}`;
+    return `Product removed: ${product.id}. Cart updated: ${JSON.stringify(updatedCart)}`;
   },
   {
     name: 'remove_tool',
