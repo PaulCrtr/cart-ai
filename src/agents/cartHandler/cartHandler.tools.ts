@@ -22,9 +22,10 @@ const readTool: Tool = tool(
 const addTool: DynamicStructuredTool = tool(
   ({ product }) => {
     const cart = loadCart();
-    cart.push({ ...product, id: newUniqueID(cart) });
-    saveCart(cart);
-    return `Product added: ${product.name}. Cart updated: ${JSON.stringify(cart)}`;
+    const formattedProduct = { ...product, id: newUniqueID(cart) };
+    const updatedCart = [...cart, formattedProduct];
+    saveCart(updatedCart);
+    return JSON.stringify({ productAdded: formattedProduct, updatedCart });
   },
   {
     name: 'add_tool',
@@ -43,7 +44,7 @@ const removeTool: DynamicStructuredTool = tool(
     const cart = loadCart();
     const updatedCart = cart.filter((item: ProductT) => item.id !== product.id);
     saveCart(updatedCart);
-    return `Product removed: ${product.id}. Cart updated: ${JSON.stringify(updatedCart)}`;
+    return JSON.stringify({ productRemoved: product, updatedCart });
   },
   {
     name: 'remove_tool',
