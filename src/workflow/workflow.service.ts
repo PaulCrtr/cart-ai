@@ -16,7 +16,7 @@ export type AgentStateT = {
 export class WorkflowService {
   private llm = new ChatOpenAI({
     modelName: 'gpt-4-turbo',
-    temperature: 0.1,
+    temperature: 0,
   });
 
   private agentState = Annotation.Root({

@@ -13,9 +13,10 @@ export class SupervisorService {
 
     const systemPrompt =
       `You are the supervisor of a shopping cart tool. You oversee two workers: ` +
-      `- 'cart_handler': manages the shopping cart (add, remove, or view items). ` +
-      `- 'researcher': searches for products on the Internet. ` +
-      `Your job is to route tasks to the appropriate worker.`;
+      `'researcher': searches for products on the Internet. ` +
+      `'cart_handler': manages the shopping cart (add, remove, read). ` +
+      `Your job is to route tasks to the appropriate worker. ` +
+      `If the request involves adding a product, the researcher agent must always be called first`;
 
     const routingTool = {
       name: 'route',
