@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { ChatOpenAI } from '@langchain/openai';
-import { START, StateGraph } from '@langchain/langgraph';
+import { START, StateGraph, CompiledStateGraph } from '@langchain/langgraph';
 import { END, Annotation } from '@langchain/langgraph';
 import { BaseMessage, HumanMessage } from '@langchain/core/messages';
 import { ResearcherService } from '../agents/researcher/researcher.service';
@@ -31,7 +31,7 @@ export class WorkflowService {
   });
 
   private members = ['cart_handler', 'researcher'] as const;
-  private graph: any;
+  private graph: CompiledStateGraph<AgentStateT, any, any>;
 
   constructor(
     private cartHandlerService: CartHandlerService,
